@@ -1,0 +1,6 @@
+{
+  "name": "behavior-enhancer",
+  "version": "0.1.0",
+  "description": "Tool-call discipline for Codex: read-before-write veto, failure convergence, parallel-window veto, write verification with rollback, high-risk command gate. FULL-tier adapter of behavior-enhancer-generic.",
+  "hooks": ["hooks/hooks.json"]
+}

@@ -1,0 +1,28 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "^(Bash|PowerShell|Read|Write|Edit)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"require(process.env.PLUGIN_ROOT + '/hooks/pre_tool_use.cjs')\"",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "^(Bash|PowerShell|Read|Write|Edit)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"require(process.env.PLUGIN_ROOT + '/hooks/post_tool_use.cjs')\"",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}

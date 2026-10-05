@@ -1,0 +1,4 @@
+# 测试 fixtures(自动生成,不提交)
+hooks/.fixtures/
+# 引擎生成(插件被加载时写入)
+.claude-plugin/types/
