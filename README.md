@@ -11,7 +11,7 @@
 
 | 宿主 | 形态 | 装什么 | 状态(2026-10-05) |
 | :--- | :--- | :--- | :--- |
-| DSH | FULL | 原插件 `dsh-behavior-enhancer`(独立仓库,generic 只放指针) | 已达成 |
+| DSH | FULL | 原插件 `dsh-behavior-enhancer`(独立仓库;[指针](adapters/dsh/README.md)含待同步清单) | 已达成 |
 | Claude Code | FULL(8 项) | [`adapters/claude-code/`](adapters/claude-code/README.md)(插件,F3b 为"并发窗口拦截"等价实现) | 引擎级测试 12/12,狗粮中 |
 | Codex | FULL(8 项) | [`adapters/codex/`](adapters/codex/README.md)(config.toml hooks 或插件形态) | 协议测试 13/13,桌面版点火实测 |
 | Pi | FULL(7 项 + F9 半) | [`adapters/pi/`](adapters/pi/README.md)(pi extension) | 协议测试 11/11,实机带电实测 |
