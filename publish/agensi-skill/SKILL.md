@@ -63,3 +63,10 @@ description: Behavior discipline for agent tool calls: read files before editing
   important file.
 - This skill cannot intercept; compliance is on you. Hosts with the plugin version enforce it
   (unread = write rejected) using matching rules.
+
+---
+
+**Additional materials** (in the `references/` folder beside this file): ready-to-paste discipline
+blocks for Claude Code / Codex / Pi / Cursor, and an advanced guide for building a hard-enforcement
+adapter on hosts that have hook APIs.
+
