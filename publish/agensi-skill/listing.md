@@ -82,7 +82,7 @@ Pure SKILL.md standard — no scripts, no runtime, no permissions. Works with an
 **Free**
 
 ## Tags / Categories / Usecases(建议)
-- Category: **Develop → code quality**;secondary: Develop → testing、Operate → productivity
+- Category(最多 3,第一个是主分类):**① Code Quality & Review** → ② Prompt & Skill Engineering → ③ Productivity
 - Tags: `behavior discipline` `read-before-write` `failure recovery` `agent safety` `code quality` `parallel control`
 
 ## Permissions(建议)
