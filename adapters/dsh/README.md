@@ -16,11 +16,12 @@
 
 ## 安装
 
+> **默认装原插件 `@zoria-lind/dsh-behavior-enhancer`(npm 现成,DSH 版还好好的)**。
+> 本适配器**不发布 npm**,只在想要 generic 增量(F1 读前拦截 / lightParse 正则修复 /
+> 标记注释形态)时按本地路径安装:
+
 ```sh
-# 本地路径安装(DSH 插件加载器)
 dsh plugin add <本目录绝对路径>
-# 或发布 npm 后:
-dsh plugin add @zoria-lind/dsh-behavior-enhancer-generic
 ```
 
 loader 契约与配置覆盖规则与原插件一致(id-targeted config 整体浅替换,覆盖时带全量 config)。
