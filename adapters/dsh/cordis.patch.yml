@@ -1,0 +1,7 @@
+# dsh bundle layer: mount the behavior-enhancer-generic plugin.
+- insert:
+    - id: behavior-enhancer-generic
+      name: '@zoria-lind/dsh-behavior-enhancer-generic'
+      # 全部模块按代码默认值启用(各节含义见 README)。
+      # 个人配置覆盖(如落盘改 D 盘)放 profile 级 cordis.patch.yml:
+      # loader 对 id-targeted config 是整体浅替换,覆盖时需带全量 config。

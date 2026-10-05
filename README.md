@@ -11,7 +11,7 @@
 
 | 宿主 | 形态 | 装什么 | 状态(2026-10-05) |
 | :--- | :--- | :--- | :--- |
-| DSH | FULL | 原插件 `dsh-behavior-enhancer`(独立仓库;[指针](adapters/dsh/README.md)含待同步清单) | 已达成 |
+| DSH | FULL | [`adapters/dsh/`](adapters/dsh/README.md)(**可安装插件**:原插件全部模块 + F1 读前拦截 + 两个修复) | mock-ctx 全模块测试通过,待装机实测 |
 | Claude Code | FULL(8 项) | [`adapters/claude-code/`](adapters/claude-code/README.md)(插件,F3b 为"并发窗口拦截"等价实现) | 引擎级测试 12/12,狗粮中 |
 | Codex | FULL(8 项) | [`adapters/codex/`](adapters/codex/README.md)(config.toml hooks 或插件形态) | 协议测试 13/13,桌面版点火实测 |
 | Pi | FULL(7 项 + F9 半) | [`adapters/pi/`](adapters/pi/README.md)(pi extension) | 协议测试 11/11,实机带电实测 |
@@ -35,8 +35,9 @@
 
 ## 与 DSH 原插件的关系
 
-两个独立仓库**各自演进,不做同步机制**:generic 版规则初稿从 DSH 版抄(起步同源),此后独立
-迭代;哪边改出更好的规矩,另一边觉得值就手动抄。
+DSH 适配器基于原插件 `dsh-behavior-enhancer`(独立仓库)起步并叠加 generic 增量,此后**各自演进,
+不做同步机制**:哪边改出更好的规矩,另一边觉得值就手动抄。**二选一安装,不要同时装两个**
+(见 [`adapters/dsh/README.md`](adapters/dsh/README.md))。
 
 ## 仓库结构
 

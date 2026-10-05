@@ -1,0 +1,48 @@
+{
+  "name": "@zoria-lind/dsh-behavior-enhancer-generic",
+  "version": "0.1.0",
+  "description": "behavior-enhancer-generic 的 DSH 适配器:先读后写 veto / 行为约束段 / 并行收敛 / 连续失败介入 / 写后检查与 .bak 回滚 / 高风险闸门 / 遵守度统计,基于 DSH 真实插件 API",
+  "license": "MIT",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": [
+    "src",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node test/smoke.mjs"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "pluginType": "feature",
+    "compatibility": {
+      "dsh": ">=0.1.5-rc.1 <0.1.6-0 || >=0.1.6-rc.0 <0.1.7-0 || >=0.1.7-rc.0 <0.2.0-0",
+      "dshReleases": {
+        "0.1.5-rc.1": "compatible",
+        "0.1.5-rc.2": "compatible",
+        "0.1.7-rc.1": "compatible",
+        "0.2.0-rc.2": "compatible"
+      }
+    }
+  },
+  "keywords": [
+    "dsh",
+    "behavior",
+    "read-before-write",
+    "parallel",
+    "stability",
+    "error-recovery",
+    "dsh-plugin",
+    "deepseek-harness"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
