@@ -12,9 +12,9 @@ Tool-call discipline for any AI agent: read-before-write, failure convergence, p
 
 ### Full Description
 
-Most agent mistakes are not intelligence problems — they are discipline problems. Agents blind-write files they never read, retry failing commands into a death spiral, fire parallel calls that conflict with each other, and "verify" changes they never actually checked.
+Many agent mistakes are not intelligence problems — they are discipline problems. Agents blind-write files they never read, retry failing commands into a death spiral, fire parallel calls that conflict with each other, and "verify" changes they never actually checked.
 
-`behavior-enhancer-skill` installs a set of seven self-discipline rules that fix exactly these failure modes:
+`behavior-enhancer-skill` installs a set of seven self-discipline rules that target exactly these failure modes:
 
 - **Read before write** — never edit a file without reading it first; files marked with a `/force-read` comment in their header must be read completely before any change.
 - **Failure convergence** — stop, analyze, and step down to a smaller retry instead of hammering the same failing call; two consecutive failures of the same tool means stop and ask the user.
@@ -24,9 +24,9 @@ Most agent mistakes are not intelligence problems — they are discipline proble
 - **Verification evidence** — every change ships with evidence, or an explicit "not yet verified".
 - **Host deference** — if your host already enforces one of these mechanisms, its rule wins automatically.
 
-**Honest positioning**: this is the guidance tier. It cannot intercept tool calls — it makes your agent *want* to behave. The rules were extracted from a production enforcement plugin that has been tested across DSH, Claude Code, Codex and Pi; the hard-enforcement adapters (real interception, auto-rollback, high-risk gates) are open source at [github.com/Zoria-Lind/behavior-enhancer-generic](https://github.com/Zoria-Lind/behavior-enhancer-generic).
+**Honest positioning**: this is the guidance tier. It cannot intercept tool calls — it makes your agent *want* to behave. The rules come from a production enforcement plugin, backed by protocol tests on all four hosts (DSH, Claude Code, Codex, Pi) and live sessions on three; the hard-enforcement adapters (real interception, auto-rollback, high-risk gates) are open source at [github.com/Zoria-Lind/behavior-enhancer-generic](https://github.com/Zoria-Lind/behavior-enhancer-generic).
 
-Works with any agent that reads the open SKILL.md standard: Claude Code, Codex CLI, Cursor, Gemini CLI, VS Code Copilot, DSH, and 20+ more. Drop it in once; it applies to every session.
+Works with any agent that reads the open SKILL.md standard: Claude Code, Codex CLI, Cursor, Gemini CLI, VS Code Copilot, and more. Drop it in once; it's ready for every session.
 
 ## Step 3 — Demo
 
@@ -66,7 +66,7 @@ read package.json (offset 1, limit 100)
 **4. Final message:** "package.json now has name probe-x; everything else unchanged."
 
 ## Why this matters
-Without the skill, a compliant agent would have overwritten the file blind — the exact scenario that corrupts real projects. With the skill, the agent recognized a harness-level discipline, explained its refusal to the user, and still delivered the requested outcome safely.
+Without the skill, a compliant agent would have overwritten the file blind — exactly the kind of blind overwrite that breaks real projects. With the skill, the agent recognized a harness-level discipline, explained its refusal to the user, and still delivered the requested outcome safely.
 
 **Next steps**
 - Drop `SKILL.md` into your agent (Claude Code, Codex, Cursor, or any compatible host).
@@ -76,7 +76,7 @@ Without the skill, a compliant agent would have overwritten the file blind — t
 ## Step 4 — Compatibility
 
 ### Compatibility Note
-Pure SKILL.md standard — no scripts, no runtime, no permissions. Works with any compatible agent (Claude Code, Codex CLI, Cursor, Gemini CLI, VS Code Copilot, DSH, 20+). Guidance only; for hard interception see the open-source adapters (GitHub).
+Pure SKILL.md standard — no scripts, no runtime, no permissions. Works with any compatible agent (Claude Code, Codex CLI, Cursor, Gemini CLI, VS Code Copilot, and more); DSH users get a ready-to-paste AGENTS.md fragment in the package. Guidance only; for hard interception see the open-source adapters (GitHub).
 
 ## Step 5 — Pricing
 **Free**
@@ -90,7 +90,7 @@ None required。
 
 ## FAQ(建议)
 - **Does it block dangerous tool calls?** No — this is the guidance tier. It makes the agent follow the rules voluntarily; hard blocking ships as open-source adapters (GitHub link in description).
-- **Which agents can use it?** Anything that reads the open SKILL.md standard: Claude Code, Codex CLI, Cursor, Gemini CLI, VS Code Copilot, DSH, and 20+ more.
+- **Which agents can use it?** Anything that reads the open SKILL.md standard: Claude Code, Codex CLI, Cursor, Gemini CLI, VS Code Copilot, and more. DSH users get a ready-to-paste AGENTS.md fragment in the package.
 - **What is the /force-read marker?** A comment in a file's header (e.g. `// /force-read`) that declares the file important — the agent must read it fully before editing.
 - **What if my host already has write protection?** The skill defers to host mechanisms automatically; its rules step aside instead of double-binding.
 
