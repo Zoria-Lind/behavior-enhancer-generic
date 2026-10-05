@@ -15,7 +15,7 @@
 | Claude Code | FULL(8 项) | [`adapters/claude-code/`](adapters/claude-code/README.md)(插件,F3b 为"并发窗口拦截"等价实现) | 引擎级测试 12/12,狗粮中 |
 | Codex | FULL(8 项) | [`adapters/codex/`](adapters/codex/README.md)(config.toml hooks 或插件形态) | 协议测试 13/13,桌面版点火实测 |
 | Pi | FULL(7 项 + F9 半) | [`adapters/pi/`](adapters/pi/README.md)(pi extension) | 协议测试 11/11,实机带电实测 |
-| 其他宿主 | SOFT | [`skill/SKILL.md`](skill/SKILL.md) + [`skill/fragments/`](skill/fragments/) | 已发布形态 |
+| 其他宿主 | SOFT + ADAPTIVE | [`skill/SKILL.md`](skill/SKILL.md) §8 引导:Agent 首次使用时按 `core/adapter-template.md` 自建适配器(保守测试、保守 FULL、交付报告) | 已发布形态 |
 
 ## 四态激活模型
 
@@ -43,7 +43,7 @@ DSH 适配器基于原插件 `dsh-behavior-enhancer`(独立仓库)起步并叠�
 
 ```
 behavior-enhancer-generic/
-├── core/        # 行为语义定义 + capability 矩阵(四态)
+├── core/        # 行为语义定义 + capability 矩阵(四态)+ 通用适配器模板(ADAPTIVE 模式)
 ├── skill/       # SOFT 产物:SKILL.md + 各宿主常驻片段(claude-code / codex / pi / cursor)
 ├── adapters/    # FULL 产物:claude-code / codex / pi(DSH 只放指针,指回原仓库)
 └── README       # 本文档:哪个宿主用哪一态、装哪个
