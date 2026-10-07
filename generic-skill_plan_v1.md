@@ -54,8 +54,8 @@ SKILL.md 内 `name` 字段用短名 `behavior-enhancer`。
 | :--- | :--- | :--- |
 | DSH | cordis 全拦截 | 已有原插件 = FULL,generic 项目不重复实现(只放指针) |
 | Claude Code | hooks(PreToolUse veto)+ 插件系统 | 插件版第二宿主,可 FULL |
-| **Pi** | **beforeToolCall 可 block + afterToolCall + Extension 机制(pi-durable:tools/sections/hooks/wrappers/tasks)** | **FULL 可行(2026-10-04 源码查证,repo 在 D:\dsh\_pi-src);适配器形态 = pi extension** |
-| **Codex** | **与 Claude Code 同源的 hook 协议(PreToolUse/PostToolUse + permission_decision allow/deny)+ 插件 manifest 系统** | **FULL 可行(2026-10-04 源码查证,repo 在 D:\dsh\_codex-src);适配器与 Claude Code 共用同一份 hook 实现** |
+| **Pi** | **beforeToolCall 可 block + afterToolCall + Extension 机制(pi-durable:tools/sections/hooks/wrappers/tasks)** | **FULL 可行(2026-10-04 源码查证);适配器形态 = pi extension** |
+| **Codex** | **与 Claude Code 同源的 hook 协议(PreToolUse/PostToolUse + permission_decision allow/deny)+ 插件 manifest 系统** | **FULL 可行(2026-10-04 源码查证);适配器与 Claude Code 共用同一份 hook 实现** |
 
 **Phase 0 结论(2026-10-04)**:四个宿主全部具备 FULL 级拦截能力;CC/Codex 共享 hook 实现,Pi 用 extension 形态,DSH 原插件。
 

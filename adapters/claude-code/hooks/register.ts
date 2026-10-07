@@ -13,6 +13,7 @@ import type { Range, ReadRegistry } from '../types'
 const FORCE_READ_TOKEN = '/force-read'
 const IMPORTANT_PATTERNS = ['package.json', '*.config.*', '*.lock', 'Dockerfile', 'Makefile', '.github/workflows/*']
 const READ_TTL_MS = 60 * 60 * 1000 // 读记录会话内 1h(v1 硬编码,v2 开放配置)
+const HASH_TTL_MS = 24 * 60 * 60 * 1000 // F1:带内容哈希的读记录多留 24h,过期后由写前哈希比对兜底
 const MAX_STRIKES = 3 // hardGate 逃生:同一原因连续拦截超过该次数 → 放行
 const MAX_FAILURES = 2 // 同工具连续失败阈值 → 注入停手提醒
 const CHECK_EXTENSIONS = new Set(['json', 'yaml', 'yml', 'js', 'mjs', 'cjs', 'ts', 'tsx', 'jsx', 'py', 'ps1', 'sh', 'toml', 'xml'])
@@ -102,10 +103,21 @@ function pruneAt(value: ReadRegistry | undefined, now: number): [ReadRegistry, b
   const out: ReadRegistry = {}
   let changed = false
   for (const [k, v] of Object.entries(value ?? {})) {
-    if (now - v.at < READ_TTL_MS) out[k] = v
+    // F1:带哈希的条目多留 24h(过期后靠写前哈希判未变);无哈希条目仍按 1h TTL
+    const ttl = v.hash ? HASH_TTL_MS : READ_TTL_MS
+    if (now - v.at < ttl) out[k] = v
     else changed = true
   }
   return [out, changed]
+}
+// F1:内容哈希(fnv-1a,纯数据)—— 读时记、写时比,消灭"TTL 过期被迫重读"
+function hashOf(text: string): string {
+  let h = 0x811c9dc5
+  for (let i = 0; i < text.length; i++) {
+    h ^= text.charCodeAt(i)
+    h = Math.imul(h, 0x01000193) >>> 0
+  }
+  return h.toString(36)
 }
 
 // ---- F3a/F4:失败判定(DSH failureDetect 签名移植,纯数据) ----
@@ -180,7 +192,8 @@ function lightParse(filePath: string, content: string): string[] {
     if (c === '/' && nxt === '*') { state = 'block-comment'; i++; continue }
     if (HASH_COMMENT_EXTS.has(ext) && c === '#') { state = 'line-comment'; continue }
     // 正则字面量启发式(除法不误判:标识符/字符串/数字后不触发)
-    if (c === '/' && nxt !== '/' && nxt !== '*' &&
+    // TSX/JSX 的 </Tag> 会命中"< 是正则起始字符"启发式,吞掉后续括号(2026-10-07 实测误报);JSX 文件禁用正则启发式
+    if (!(ext === 'tsx' || ext === 'jsx') && c === '/' && nxt !== '/' && nxt !== '*' &&
       (REGEX_START_CHARS.includes(lastCodeChar) || REGEX_START_KEYWORDS.has(lastWord))) {
       state = 'regex'
       continue
@@ -231,12 +244,15 @@ const readHook = async ($: any, e: any, next: any) => {
       const offset = typeof e.offset === 'number' ? e.offset : 1
       const limit = typeof e.limit === 'number' ? e.limit : 2000
       const range: Range = [offset, offset + limit - 1]
+      // F1:读时顺带记内容哈希(仅 I/O,不进上下文);读不到则弃旧哈希,防误判"未变"
+      let fileHash: string | undefined
+      try { fileHash = hashOf(await $.fs.read(e.file_path)) } catch { fileHash = undefined }
       for (let attempt = 0; attempt < 3; attempt++) {
         const { value, version } = await $.state.get(REGISTRY)
         const now = await $.clock.now()
         const [clean] = pruneAt(value, now)
-        const cur = clean[e.file_path]?.ranges ?? []
-        const nextReg: ReadRegistry = { ...clean, [e.file_path]: { ranges: mergeRange(cur, range), at: now } }
+        const prev = clean[e.file_path]
+        const nextReg: ReadRegistry = { ...clean, [e.file_path]: { ranges: mergeRange(prev?.ranges ?? [], range), at: now, hash: fileHash } }
         const { isSet } = await $.state.set(REGISTRY, nextReg, { ifVersion: version })
         if (isSet) break
       }
@@ -271,7 +287,16 @@ const fileToolHook = async ($: any, e: any, next: any) => {
       const now = await $.clock.now()
       const [clean, changed] = pruneAt(value, now)
       if (changed) await $.state.set(REGISTRY, clean)
-      covered = clean[path]?.ranges ?? []
+      const rec = clean[path]
+      covered = rec?.ranges ?? []
+      // F1:条目带哈希且已过 1h TTL → 用当前内容哈希判"未变",一致则视为已读并续期
+      if (rec?.hash && now - rec.at >= READ_TTL_MS) {
+        if (hashOf(before) === rec.hash) {
+          try { await $.state.set(REGISTRY, { ...clean, [path]: { ...rec, at: now } }) } catch { /* 续期失败不致命 */ }
+        } else {
+          covered = [] // 内容已变:强制补读
+        }
+      }
     } catch { covered = [] } // 状态读不到按未读处理,但绝不让检查异常阻断写入
     const gaps = gapsOf(covered, total)
     if (important && gaps.length > 0) {
@@ -435,6 +460,7 @@ const composeHook = async ($: any, _e: any, next: any) => {
 - 写后检查:JSON/YAML/代码文件写坏会自动回滚并报告(括号配对等轻量校验)。
 - 高风险命令(rm -rf、Remove-Item -Recurse、format、del /s 等)会被拦截,执行前先向用户说明影响范围并获得确认;被拒后不换写法绕过。
 - 验证环:改过文件必须给出验证证据,没有就明说"尚未验证";不确定就明说,禁止编造。
+- 省 token 纪律(cc-token-optimizer 配套):大范围搜索/多文件阅读丢给 subagent 汇总返回;长任务中段主动 /compact;超长任务拆分会话;/fast 跑纯机械活。
 - 并行档位(实时,由本插件按失败/成功自动升降):当前 ${tierText};连续成功 ${successStreak}/3。`,
   }
   return { ...out, sections: [...out.sections, section] }

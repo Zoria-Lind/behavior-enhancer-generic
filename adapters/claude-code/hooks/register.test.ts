@@ -17,6 +17,7 @@ const setup = (on: any) => {
   const state = new Map<string, unknown>() // `${plugin}:${key}` → value
   const knob = { bashIsError: false, holdNext: false }
   let version = 0
+  let now = 1000 // 可推进的虚拟时钟(F1 TTL 测试用)
   let holdStarted = () => {}
   let holdRelease = () => {}
   const holdStartedP = new Promise<void>((r) => { holdStarted = r })
@@ -46,7 +47,7 @@ const setup = (on: any) => {
     version += 1
     return { value: { isSet: true, version } }
   })
-  on('clock.now', () => ({ value: 1000 }))
+  on('clock.now', () => ({ value: now }))
 
   // 引擎侧事件 bottom(全部先注册)
   on('session.start', (_$: any, e: any) => ({ cwd: e.cwd }))
@@ -78,7 +79,7 @@ const setup = (on: any) => {
   })
   on('tool.call', { tool: 'PowerShell' }, () => ({ result: { stdout: '', stderr: '', interrupted: false } }))
 
-  return { vfs, store, state, knob, holdStartedP, holdRelease }
+  return { vfs, store, state, knob, holdStartedP, holdRelease, advance: (ms: number) => { now += ms } }
 }
 
 test('重要文件(默认模式 *.config.*)未读 → Write 被拦截', async ($, on) => {
@@ -210,6 +211,27 @@ test('failureGuard:同工具连续失败 2 次 → 停手提醒;成功后重置'
   const stats = (b.store.get('stats') ?? {}) as Record<string, number>
   expect(stats['behavior.failures']).toBe(2)
   expect(stats['behavior.alerts']).toBe(1)
+})
+
+test('F1:读满后超 1h TTL 但内容未变 → Write 靠哈希兜底放行', async ($, on) => {
+  const b = setup(on)
+  b.vfs.set('/pkg/app.config.ts', 'export const a = 1\n')
+  await $.tool.call({ tool: 'Read', file_path: '/pkg/app.config.ts', offset: 1, limit: 1 })
+  b.advance(60 * 60 * 1000 + 1) // 越过 1h TTL
+  const ran = await $.tool.call({ tool: 'Write', file_path: '/pkg/app.config.ts', content: 'export const b = 2\n' })
+  expect(ran.deny).toBeUndefined() // 内容未变:哈希判为已读,不被迫重读
+  expect(ran.context).toBeUndefined()
+})
+
+test('F1:读满后超 1h TTL 且内容已变 → 重新拦截', async ($, on) => {
+  const b = setup(on)
+  b.vfs.set('/pkg/app.config.ts', 'export const a = 1\n')
+  await $.tool.call({ tool: 'Read', file_path: '/pkg/app.config.ts', offset: 1, limit: 1 })
+  b.vfs.set('/pkg/app.config.ts', 'export const changed = true\nexport const more = true\n') // 模拟外部修改
+  b.advance(60 * 60 * 1000 + 1)
+  const ran = await $.tool.call({ tool: 'Write', file_path: '/pkg/app.config.ts', content: 'export const b = 2\n' })
+  expect(ran.deny).toMatch(/重要文件/) // 哈希不一致:强制补读
+  expect(ran.deny).toMatch(/offset=1/)
 })
 
 test('/behavior-status 命令输出统计', async ($, on) => {

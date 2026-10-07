@@ -21,7 +21,7 @@ behavior-enhancer-generic 的 Claude Code 插件适配器。行为语义同源�
 
 ```sh
 # 单会话试用
-claude --plugin-dir "D:\dsh\dsh-plugins\behavior-enhancer-generic\adapters\claude-code"
+claude --plugin-dir "<仓库目录>\adapters\claude-code"
 
 # 常驻:环境变量(desktop/SDK 启动也能读;路径用平台分隔符)
 # CLAUDE_CODE_PLUGIN_DIRS=...\adapters\claude-code
@@ -34,7 +34,7 @@ claude --plugin-dir "D:\dsh\dsh-plugins\behavior-enhancer-generic\adapters\claud
 ```sh
 cd adapters/claude-code
 claude plugin validate .   # 引擎静态校验(manifest + hooks 源码)
-claude plugin test .       # 8 个引擎级测试(虚拟 fs/state/store 全链)
+claude plugin test .       # 14 个引擎级测试(虚拟 fs/state/store 全链)
 ```
 
 ## 诚实交底(v1 与方案/DSH 的差异)

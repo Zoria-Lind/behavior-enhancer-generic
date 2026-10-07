@@ -96,7 +96,7 @@
 > 机制 ≠ DSH 池上限(引擎仍派发、超档被拒而非排队),命名与 README 均如实标注;
 > F4 在 CC 的落地 = 结果 `context` 注入停手提醒(与 DSH followup 同构,已实测)。
 >
-> **2026-10-05 Codex 行**:适配器已实施(`adapters/codex`),协议细节对照 `_codex-src` 源码查证
+> **2026-10-05 Codex 行**:适配器已实施(`adapters/codex`),协议细节对照 Codex 源码查证
 > (stdin 单行 JSON / deny + additionalContext schema / sync 放行=空 stdout / exit2+stderr=拦截),
 > Node 协议级测试 9/9 ✔;**未在真实 codex 会话实测(本机未装 codex CLI)**——按 NATIVE 验证原则,
 > 装机后 Phase 4 实测才升级为已验证。F1/F3a/F3b(拦截等价,跨进程 mkdir 锁)/F4/F5/F6/F9(状态文件)
@@ -104,7 +104,7 @@
 > NATIVE 常驻通道,片段已有)。
 >
 > **2026-10-05 Pi 行**:适配器已实施(`adapters/pi`,pi extension 形态),ExtensionAPI 全部对照
-> `_pi-src` 源码查证(tool_call block+reason 进错误结果、tool_result content 覆盖、sections 渲染、
+> Pi 源码查证(tool_call block+reason 进错误结果、tool_result content 覆盖、sections 渲染、
 > 进程内 Node/无跨进程竞态),mock-pi 协议级测试 9/9 ✔;**未在真实 pi 会话实测(本机未装 pi)**。
 > F1/F2(sections)/F3a/F3b(拦截等价,进程内计数)/F4/F5/F6 已实现;F5 快照为内存(回滚完整,磁盘
 > 历史 v1.1);F9 半(状态文件计次,registerCommand 输出 API 未查得,v1 不注册命令)。

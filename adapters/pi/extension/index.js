@@ -1,5 +1,5 @@
 // behavior-enhancer — Pi extension(FULL 层)。
-// API 全部源码查证(D:\dsh\_pi-src\packages\coding-agent\src\core\extensions\types.ts + runner.ts):
+// API 全部源码查证(packages/coding-agent/src/core/extensions/types.ts + runner.ts):
 //   - tool_call handler 返回 { block, reason } → 工具不执行,reason 成为错误结果文本(模型可见)
 //   - tool_result handler 返回 { content } 全量覆盖 → 追加提醒文本 = 模型可见通道
 //   - before_agent_start 可改 event.systemPromptOptions.sections(每段按名字包 tag 渲染)

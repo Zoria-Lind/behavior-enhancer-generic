@@ -1,7 +1,7 @@
 Add-Type -AssemblyName System.Drawing
 
-$srcPath = 'D:\dsh\dsh-plugins\behavior-enhancer-generic\publish\agensi-skill\behavior-enhancer-skill-logo_template.jpeg'
-$outPath = 'D:\dsh\dsh-plugins\behavior-enhancer-generic\publish\agensi-skill\behavior-enhancer-skill-logo.png'
+$srcPath = Join-Path $PSScriptRoot 'behavior-enhancer-skill-logo_template.jpeg'
+$outPath = Join-Path $PSScriptRoot 'behavior-enhancer-skill-logo.png'
 
 $src = [System.Drawing.Image]::FromFile($srcPath)
 $bmp = New-Object System.Drawing.Bitmap(512, 512)

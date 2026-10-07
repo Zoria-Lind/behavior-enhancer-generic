@@ -1,7 +1,7 @@
 # behavior-enhancer — Codex 适配器(FULL 层)
 
 behavior-enhancer-generic 的 Codex 插件适配器。协议细节全部源码查证
-(`D:\dsh\_codex-src\codex-rs\hooks`):stdin 单行 JSON、deny/additionalContext 输出 schema、
+(Codex 源码 `codex-rs/hooks`):stdin 单行 JSON、deny/additionalContext 输出 schema、
 sync handler 语义(放行 = 空 stdout;deny+additionalContext 同传;exit 2+stderr = 拦截,绝不触发)。
 行为语义同源文件:[`core/semantics.md`](../../core/semantics.md);能力矩阵:[`core/audit.md`](../../core/audit.md)。
 
@@ -42,13 +42,13 @@ sync handler 语义(放行 = 空 stdout;deny+additionalContext 同传;exit 2+std
 [[hooks.PreToolUse]]
 matcher = "^(Bash|PowerShell|Read|Write|Edit)$"
 hooks = [
-  { type = "command", command = 'node "D:\dsh\dsh-plugins\behavior-enhancer-generic\adapters\codex\hooks\pre_tool_use.cjs"', timeout = 15 },
+  { type = "command", command = 'node "<仓库目录>\adapters\codex\hooks\pre_tool_use.cjs"', timeout = 15 },
 ]
 
 [[hooks.PostToolUse]]
 matcher = "^(Bash|PowerShell|Read|Write|Edit)$"
 hooks = [
-  { type = "command", command = 'node "D:\dsh\dsh-plugins\behavior-enhancer-generic\adapters\codex\hooks\post_tool_use.cjs"', timeout = 15 },
+  { type = "command", command = 'node "<仓库目录>\adapters\codex\hooks\post_tool_use.cjs"', timeout = 15 },
 ]
 ```
 

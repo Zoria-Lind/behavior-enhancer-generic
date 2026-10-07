@@ -20,15 +20,14 @@ const MAX_DIFF_BYTES = 80 * 1024 // 截断口径与 better-edit 对齐(400 行 /
 // 标注仍为 0,noBaseline 689)。`where git` 解析 + 常见安装位兜底。
 const GIT_CANDIDATES = [
   (() => { try { const out = String(execFileSync('where', ['git'], { windowsHide: true, timeout: 2000 })); const hit = out.split(/\r?\n/)[0]?.trim(); return hit || null } catch { return null } })(),
-  'D:\\download\\Git\\cmd\\git.exe',
   'C:\\Program Files\\Git\\cmd\\git.exe',
 ]
 const GIT_BIN = GIT_CANDIDATES.find((p) => p && existsSync(p)) ?? 'git'
 
-// 诊断埋点(2026-09-14 深夜排查 ⚠ D 三次修复未生效):每条 pwsh 一行,
-// 落本地文件(harness stdout 被丢弃,文件是唯一可见通道)。排查完可删。
-const DEBUG_LOG = 'D:/dsh/behavior-enhancer/wdv-debug.log'
-const dbg = (msg) => { try { appendFileSync(DEBUG_LOG, `${new Date().toISOString()} ${msg}\n`, 'utf8') } catch { /* ignore */ } }
+// 诊断埋点:每条 pwsh 一行,落环境变量指定的文件(harness stdout 被丢弃,文件是唯一可见通道)。
+// 默认关闭;排查时设 BEH_WDV_DEBUG_LOG=<文件路径> 打开。
+const DEBUG_LOG = process.env.BEH_WDV_DEBUG_LOG || null
+const dbg = (msg) => { if (!DEBUG_LOG) return; try { appendFileSync(DEBUG_LOG, `${new Date().toISOString()} ${msg}\n`, 'utf8') } catch { /* ignore */ } }
 
 // 与 dsh-tool-pwsh 的 resolveWorkdir 同款:相对 workdir 要相对会话 cwd 解析。
 // exec 上没有 cwd 字段,只能拼 exec.arguments.workdir ?? session.header.cwd;禁止 process.cwd()。

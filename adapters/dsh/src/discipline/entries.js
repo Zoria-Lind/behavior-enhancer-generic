@@ -45,6 +45,13 @@ export const DISCIPLINE_ENTRIES = [
     tags: ['quality'],
     text: '上下文已压缩时:若历史被压缩为摘要(compacted-summary),对细节有疑问先查日志或重新获取,不要臆造。',
   },
+  {
+    id: 'token-economy',
+    level: 'soft',
+    scope: 'global',
+    tags: ['efficiency'],
+    text: '省 token:大范围搜索/多文件阅读用 subagent 汇总返回;长任务中段主动 compact 或新开会话;纯机械活用 fast 模型。',
+  },
 ]
 
 // strict 预设增量(仍为 soft;硬约束需要 check 实现,一期不承诺)
