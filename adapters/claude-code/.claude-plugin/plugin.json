@@ -1,6 +1,6 @@
 {
   "name": "behavior-enhancer",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Tool-call discipline for Claude Code: read-before-write veto, failure convergence alerts, write verification with auto-rollback, high-risk command gate. FULL-tier adapter of behavior-enhancer-generic.",
   "author": { "name": "Zoria-Lind" },
   "types": "./types/index.d.ts"
