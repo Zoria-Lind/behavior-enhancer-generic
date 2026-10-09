@@ -1,0 +1,12 @@
+{
+  "name": "zoria-behavior",
+  "owner": { "name": "Zoria-Lind" },
+  "description": "behavior-enhancer — tool-call discipline for Claude Code (read-before-write veto, failure convergence, write verification with auto-rollback, high-risk command gate). FULL-tier adapter of the behavior-enhancer-generic project. 中文:behavior-enhancer-generic 的 Claude Code FULL 档适配器。",
+  "plugins": [
+    {
+      "name": "behavior-enhancer",
+      "source": "./adapters/claude-code",
+      "description": "Tool-call discipline for Claude Code: read-before-write veto, failure convergence alerts, write verification with auto-rollback, high-risk command gate. 中文:Claude Code 的 FULL 档行为增强(能真拦截/veto/回滚,不只是提示词纪律)。"
+    }
+  ]
+}

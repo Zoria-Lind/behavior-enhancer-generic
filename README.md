@@ -57,6 +57,10 @@ cd adapters/codex && node test/adapter.test.cjs                              # 1
 cd adapters/pi && node test/adapter.test.cjs                                 # 11 个协议级测试
 ```
 
+## 相关链接
+
+- **免费 SOFT 版**(纯 SKILL.md,任何兼容宿主可用,不含可执行代码):[Agensi — Behavior Enhancer](https://www.agensi.io/skills/behavior-enhancer-skill)(本仓库的 FULL 版仍是唯一完整形态,两者互为引流)
+
 ## License
 
 MIT — 见 [LICENSE](LICENSE)。规则以 DSH 版为起点,此后独立演进。
