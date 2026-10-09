@@ -1,66 +1,82 @@
 # behavior-enhancer-generic
 
-把 `dsh-behavior-enhancer` 的行为设计做成**跨宿主双形态产品**:
+**English** · [中文](README.zh-CN.md)
 
-- **插件形态(FULL)**:宿主提供运行时拦截能力 → 真 enforcement(拦截/veto/写后校验回滚);
-- **Skill 形态(SOFT)**:宿主只有 Agent-facing 通道 → 行为引导(自律规则)。
+The behaviour design of `dsh-behavior-enhancer`, shipped as a **cross-host dual-form product**:
 
-同一个行为语义,不同的 enforcement 强度。**不吹 FULL,不假装 SOFT 是 FULL。**
+- **Plugin form (FULL)**: where the host exposes runtime interception, you get real enforcement — vetoes, write verification, auto-rollback;
+- **Skill form (SOFT)**: where the host only gives an agent-facing channel, you get behavioural guidance (self-discipline rules).
 
-## 哪个宿主装哪个
+Same semantics, different enforcement strength. **No FULL claims we cannot back, and no pretending SOFT is FULL.**
 
-| 宿主 | 形态 | 装什么 | 状态(2026-10-05) |
+## Which host gets which form
+
+| Host | Form | What to install | Status |
 | :--- | :--- | :--- | :--- |
-| DSH | FULL | [`adapters/dsh/`](adapters/dsh/README.md)(**可安装插件**:原插件全部模块 + F1 读前拦截 + 两个修复) | mock-ctx 全模块测试通过,待装机实测 |
-| Claude Code | FULL(8 项) | [`adapters/claude-code/`](adapters/claude-code/README.md)(插件,F3b 为"并发窗口拦截"等价实现) | 引擎级测试 12/12,狗粮中 |
-| Codex | FULL(8 项) | [`adapters/codex/`](adapters/codex/README.md)(config.toml hooks 或插件形态) | 协议测试 13/13,桌面版点火实测 |
-| Pi | FULL(7 项 + F9 半) | [`adapters/pi/`](adapters/pi/README.md)(pi extension) | 协议测试 11/11,实机带电实测 |
-| 其他宿主 | SOFT + ADAPTIVE | [`skill/SKILL.md`](skill/SKILL.md) §8 引导:Agent 首次使用时按 `core/adapter-template.md` 自建适配器(保守测试、保守 FULL、交付报告) | 已发布形态 |
+| Claude Code | FULL (8 features) | [`adapters/claude-code/`](adapters/claude-code/README.md) — plugin (F3b is implemented as a concurrency-window veto) | engine-level tests **14/14**, dogfooding |
+| Codex | FULL (8 features) | [`adapters/codex/`](adapters/codex/README.md) — `config.toml` hooks or plugin manifest | protocol tests 13/13, ignition-tested on the desktop build |
+| Pi | FULL (7 features + half of F9) | [`adapters/pi/`](adapters/pi/README.md) — pi extension | protocol tests 11/11, live-tested on a real install |
+| DSH | FULL | [`adapters/dsh/`](adapters/dsh/README.md) — installable plugin (all modules of the original, plus F1 read-before-write and two fixes) | all-module mock-ctx tests pass, real-install test pending |
+| Any other host | SOFT + ADAPTIVE | [`skill/SKILL.md`](skill/SKILL.md) §8: the agent self-builds an adapter from `core/adapter-template.md` (conservative testing, conservative FULL, written report) | published form |
 
-## 四态激活模型
+**Install on Claude Code (one command)**:
 
-每个 feature 独立激活,状态由**宿主 capability surface** 决定,不是用户/Agent 偏好:
+```sh
+/plugin marketplace add Zoria-Lind/behavior-enhancer-generic
+/plugin install behavior-enhancer@zoria-behavior
+```
 
-| 态 | 语义 |
+For local development you can instead use `claude --plugin-dir "<repo>\adapters\claude-code"` or
+`CLAUDE_CODE_PLUGIN_DIRS=...\adapters\claude-code` (see
+[`adapters/claude-code/README.md`](adapters/claude-code/README.md)) — **pick one, never both.**
+
+## The four-state activation model
+
+Every feature activates independently, and its state is decided by the **host's capability surface** — never by user or agent preference:
+
+| State | Meaning |
 | :--- | :--- |
-| NATIVE | 宿主已内置该行为(仅认**实测**),skill 闭嘴 |
-| FULL | 插件级接管(拦截/veto/写后校验回滚) |
-| SOFT | 行为引导(指令/流程/决策树) |
-| DISABLED | 不假装具有不存在的能力 |
+| NATIVE | The host already does this (only claimed when **measured**); the skill stays quiet |
+| FULL | Plugin-level takeover (veto / write verification / rollback) |
+| SOFT | Behavioural guidance (instructions, flow, decision trees) |
+| DISABLED | We do not pretend a capability exists |
 
-不写 `if DSH / elif ClaudeCode` 的宿主名分支,只认 capability。完整设计见
-[`generic-skill_plan_v1.md`](generic-skill_plan_v1.md);feature × capability 矩阵见
-[`core/audit.md`](core/audit.md);跨宿主共享语义(token/模式表/阈值/TTL/档位阶梯)见
-[`core/semantics.md`](core/semantics.md)。
+There are no `if DSH / elif ClaudeCode` branches — only capabilities. Full design in
+[`generic-skill_plan_v1.md`](generic-skill_plan_v1.md); the feature × capability matrix in
+[`core/audit.md`](core/audit.md); cross-host shared semantics (tokens, pattern tables, thresholds, TTL, tier ladder) in
+[`core/semantics.md`](core/semantics.md).
 
-## 与 DSH 原插件的关系
+> Note: those design documents (`core/`, `generic-skill_plan_v1.md`) are **Chinese-only** for now. English readers can work from this README plus the per-adapter READMEs.
 
-DSH 适配器基于原插件 `dsh-behavior-enhancer`(独立仓库)起步并叠加 generic 增量,此后**各自演进,
-不做同步机制**:哪边改出更好的规矩,另一边觉得值就手动抄。**二选一安装,不要同时装两个**
-(见 [`adapters/dsh/README.md`](adapters/dsh/README.md))。
+## Relationship to the DSH plugin
 
-## 仓库结构
+The DSH adapter started from the original plugin `dsh-behavior-enhancer` (a separate repo) and then added the generic work. From there the two **evolve independently — there is no sync mechanism**: when one side produces a better rule, the other copies it by hand if it is worth it. **Install one or the other, never both**
+(see [`adapters/dsh/README.md`](adapters/dsh/README.md)).
+
+## Repository layout
 
 ```
 behavior-enhancer-generic/
-├── core/        # 行为语义定义 + capability 矩阵(四态)+ 通用适配器模板(ADAPTIVE 模式)
-├── skill/       # SOFT 产物:SKILL.md + 各宿主常驻片段(claude-code / codex / pi / cursor)
-├── adapters/    # FULL 产物:claude-code / codex / pi(DSH 只放指针,指回原仓库)
-└── README       # 本文档:哪个宿主用哪一态、装哪个
+├── .claude-plugin/  # Claude Code marketplace manifest (marketplace.json, name: zoria-behavior)
+├── core/            # behaviour semantics + capability matrix (four states) + generic adapter template (ADAPTIVE mode)
+├── skill/           # SOFT artifact: SKILL.md + per-host resident fragments (claude-code / codex / pi / cursor)
+├── adapters/        # FULL artifacts: claude-code / codex / pi (DSH is only a pointer back to the original repo)
+├── publish/         # Agensi publishing artifacts (the SOFT skill package)
+└── README.md / README.zh-CN.md   # English (this file) / Chinese
 ```
 
-## 测试
+## Tests
 
 ```sh
-cd adapters/claude-code && claude plugin validate . && claude plugin test .   # 12 个引擎级测试
-cd adapters/codex && node test/adapter.test.cjs                              # 13 个协议级测试
-cd adapters/pi && node test/adapter.test.cjs                                 # 11 个协议级测试
+cd adapters/claude-code && claude plugin validate . && claude plugin test .   # 14 engine-level tests
+cd adapters/codex && node test/adapter.test.cjs                              # 13 protocol tests
+cd adapters/pi && node test/adapter.test.cjs                                 # 11 protocol tests
 ```
 
-## 相关链接
+## Links
 
-- **免费 SOFT 版**(纯 SKILL.md,任何兼容宿主可用,不含可执行代码):[Agensi — Behavior Enhancer](https://www.agensi.io/skills/behavior-enhancer-skill)(本仓库的 FULL 版仍是唯一完整形态,两者互为引流)
+- **Free SOFT version** (pure SKILL.md, works with any compatible host, no executable code): [Agensi — Behavior Enhancer](https://www.agensi.io/skills/behavior-enhancer-skill). The FULL version in this repo remains the only complete form; the two feed each other.
 
 ## License
 
-MIT — 见 [LICENSE](LICENSE)。规则以 DSH 版为起点,此后独立演进。
+MIT — see [LICENSE](LICENSE). The rules started from the DSH version and have evolved independently since.

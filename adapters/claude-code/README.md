@@ -20,12 +20,19 @@ behavior-enhancer-generic 的 Claude Code 插件适配器。行为语义同源�
 ## 安装 / 启用
 
 ```sh
-# 单会话试用
+# 推荐:从市场装(装完即用,以后可 /plugin update 升级)
+/plugin marketplace add Zoria-Lind/behavior-enhancer-generic
+/plugin install behavior-enhancer@zoria-behavior
+
+# 或单会话试用
 claude --plugin-dir "<仓库目录>\adapters\claude-code"
 
 # 常驻:环境变量(desktop/SDK 启动也能读;路径用平台分隔符)
 # CLAUDE_CODE_PLUGIN_DIRS=...\adapters\claude-code
 ```
+
+> 三种方式**只选一种**:市场装的副本与你本地的 `--plugin-dir` / `CLAUDE_CODE_PLUGIN_DIRS`
+> 副本会**双跑同一批 hook**(拦截计数翻倍)。
 
 交互式会话里该目录被 watch,改代码热重载;`$.state`/`$.store` 由宿主保存,重载不清零。
 
