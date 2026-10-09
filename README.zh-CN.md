@@ -77,6 +77,7 @@ cd adapters/pi && node test/adapter.test.cjs                                 # 1
 ## 相关链接
 
 - **免费 SOFT 版**(纯 SKILL.md,任何兼容宿主可用,不含可执行代码):[Agensi — Behavior Enhancer](https://www.agensi.io/skills/behavior-enhancer-skill)(本仓库的 FULL 版仍是唯一完整形态,两者互为引流)
+- [Claude Market](https://www.claudemarket.ai/plugins) —— Claude Code 插件目录
 
 ## License
 

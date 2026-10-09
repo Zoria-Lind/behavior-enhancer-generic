@@ -76,6 +76,7 @@ cd adapters/pi && node test/adapter.test.cjs                                 # 1
 ## Links
 
 - **Free SOFT version** (pure SKILL.md, works with any compatible host, no executable code): [Agensi — Behavior Enhancer](https://www.agensi.io/skills/behavior-enhancer-skill). The FULL version in this repo remains the only complete form; the two feed each other.
+- [Claude Market](https://www.claudemarket.ai/plugins) — Claude Code plugin directory.
 
 ## License
 
