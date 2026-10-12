@@ -2,6 +2,8 @@
 
 **English** · [中文](README.zh-CN.md)
 
+[![Listed on ClaudePluginHub](https://www.claudepluginhub.com/badge/zoria-lind-behavior-enhancer-adapters-claude-code)](https://www.claudepluginhub.com/plugins/zoria-lind-behavior-enhancer-adapters-claude-code)
+
 The behaviour design of `dsh-behavior-enhancer`, shipped as a **cross-host dual-form product**:
 
 - **Plugin form (FULL)**: where the host exposes runtime interception, you get real enforcement — vetoes, write verification, auto-rollback;
@@ -76,7 +78,8 @@ cd adapters/pi && node test/adapter.test.cjs                                 # 1
 ## Links
 
 - **Free SOFT version** (pure SKILL.md, works with any compatible host, no executable code): [Agensi — Behavior Enhancer](https://www.agensi.io/skills/behavior-enhancer-skill). The FULL version in this repo remains the only complete form; the two feed each other.
-- [Claude Market](https://www.claudemarket.ai/plugins) — Claude Code plugin directory.
+- [Claude Market](https://www.claudemarket.ai/plugins) — Claude Code plugin directory ([behavior-enhancer entry](https://www.claudemarket.ai/plugins/zoria-lind-behavior-enhancer-generic/behavior-enhancer)).
+- [Claude Plugin Hub](https://www.claudepluginhub.com/plugins/zoria-lind-behavior-enhancer-adapters-claude-code) — plugin directory (verified listing)
 
 ## License
 

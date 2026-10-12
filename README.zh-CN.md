@@ -2,6 +2,8 @@
 
 [English](README.md) · **中文**
 
+[![Listed on ClaudePluginHub](https://www.claudepluginhub.com/badge/zoria-lind-behavior-enhancer-adapters-claude-code)](https://www.claudepluginhub.com/plugins/zoria-lind-behavior-enhancer-adapters-claude-code)
+
 把 `dsh-behavior-enhancer` 的行为设计做成**跨宿主双形态产品**:
 
 - **插件形态(FULL)**:宿主提供运行时拦截能力 → 真 enforcement(拦截/veto/写后校验回滚);
@@ -77,7 +79,8 @@ cd adapters/pi && node test/adapter.test.cjs                                 # 1
 ## 相关链接
 
 - **免费 SOFT 版**(纯 SKILL.md,任何兼容宿主可用,不含可执行代码):[Agensi — Behavior Enhancer](https://www.agensi.io/skills/behavior-enhancer-skill)(本仓库的 FULL 版仍是唯一完整形态,两者互为引流)
-- [Claude Market](https://www.claudemarket.ai/plugins) —— Claude Code 插件目录
+- [Claude Market](https://www.claudemarket.ai/plugins) —— Claude Code 插件目录([behavior-enhancer 条目](https://www.claudemarket.ai/plugins/zoria-lind-behavior-enhancer-generic/behavior-enhancer))
+- [Claude Plugin Hub](https://www.claudepluginhub.com/plugins/zoria-lind-behavior-enhancer-adapters-claude-code) —— 插件目录(已验证收录)
 
 ## License
 
